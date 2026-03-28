@@ -4,17 +4,9 @@ import bethelGymLogo from "../../../assets/bethelgymlogo.png";
 
 interface HybridHeaderProps {
   sessionTitle: string;
-  className: string;
-  coach: string;
-  date: string;
 }
 
-export default function HybridHeader({
-  sessionTitle,
-  className,
-  coach,
-  date,
-}: HybridHeaderProps) {
+export default function HybridHeader({ sessionTitle }: HybridHeaderProps) {
   const [currentTime, setCurrentTime] = useState(() => {
     const now = new Date();
     return now.toLocaleTimeString("en-US", {
@@ -44,7 +36,11 @@ export default function HybridHeader({
       <div className="absolute top-[1.5vh] left-[2vw] flex items-center gap-[0.3vw]">
         <span className="w-[0.5vw] h-[0.5vw] rounded-full bg-emerald-400 animate-pulse"></span>
         <span className="text-[1.3vw] font-light tracking-widest text-white uppercase">
-          {date}
+          {new Date().toLocaleDateString("es-ES", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          })}
         </span>
       </div>
       <div className="absolute top-[1.5vh] right-[2vw] flex items-center gap-[0.3vw]">

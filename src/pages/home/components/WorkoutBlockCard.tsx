@@ -25,7 +25,7 @@ export default function WorkoutBlockCard({
       <div
         className="absolute top-0 right-0 w-[12vw] h-[12vw] rounded-full pointer-events-none"
         style={{
-          background: `radial-gradient(circle, ${block.accent}18 0%, transparent 70%)`,
+          background: `radial-gradient(circle, ${block.accent}40 0%, transparent 70%)`,
           transform: "translate(30%, -30%)",
         }}
       />

@@ -4,7 +4,8 @@ import HybridHeader from "./components/HybridHeader";
 import WorkoutBlockCard from "./components/WorkoutBlockCard";
 
 export default function Home() {
-  const { sessionTitle, className, coach, date, blocks } = workoutData;
+  const { sessionTitle, blocks } = workoutData;
+  const exerciseCount = blocks.reduce((n, b) => n + b.exercises.length, 0);
 
   return (
     <div
@@ -26,12 +27,7 @@ export default function Home() {
 
       {/* Header */}
       <section className="shrink-0">
-        <HybridHeader
-          sessionTitle={sessionTitle}
-          className={className}
-          coach={coach}
-          date={date}
-        />
+        <HybridHeader sessionTitle={sessionTitle} />
       </section>
 
       {/* 3-Column Workout Blocks */}
@@ -80,7 +76,7 @@ export default function Home() {
 
         <div className="flex items-center gap-[1vw]">
           <span className="text-[0.7vw] font-light tracking-wider text-zinc-700">
-            3 bloques &nbsp;·&nbsp; 18 ejercicios
+            {blocks.length} bloques &nbsp;·&nbsp; {exerciseCount} ítems
           </span>
           <Link
             to="/edit"
