@@ -1,14 +1,12 @@
 interface SessionInfoCardProps {
   sessionTitle: string;
-  className: string;
-  coach: string;
-  onUpdateSession: (field: "sessionTitle" | "className" | "coach", value: string) => void;
+  lastUpdated: string;
+  onUpdateSession: (field: "sessionTitle" | "lastUpdated", value: string) => void;
 }
 
 export default function SessionInfoCard({
   sessionTitle,
-  className,
-  coach,
+  lastUpdated,
   onUpdateSession,
 }: SessionInfoCardProps) {
   return (
@@ -19,7 +17,6 @@ export default function SessionInfoCard({
         border: "1px solid rgba(255,255,255,0.07)",
       }}
     >
-      {/* Card label */}
       <div className="flex items-center gap-2 mb-6">
         <i className="ri-file-edit-line text-zinc-600 text-sm" />
         <span
@@ -30,13 +27,12 @@ export default function SessionInfoCard({
         </span>
       </div>
 
-      {/* Session title — large */}
       <div className="mb-6">
         <label
           className="block text-xs font-medium tracking-[0.25em] uppercase text-zinc-700 mb-2"
           style={{ fontFamily: "'Barlow', sans-serif" }}
         >
-          Título
+          Título de sesión
         </label>
         <input
           type="text"
@@ -48,40 +44,27 @@ export default function SessionInfoCard({
         />
       </div>
 
-      {/* Class name + Coach — two columns on sm+ */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <div>
-          <label
-            className="block text-xs font-medium tracking-[0.25em] uppercase text-zinc-700 mb-2"
-            style={{ fontFamily: "'Barlow', sans-serif" }}
-          >
-            Nombre de Clase
-          </label>
-          <input
-            type="text"
-            value={className}
-            onChange={(e) => onUpdateSession("className", e.target.value)}
-            className="w-full bg-transparent text-sm font-medium text-zinc-300 border-b border-zinc-800 focus:border-zinc-500 outline-none pb-2 transition-colors duration-200"
-            style={{ fontFamily: "'Barlow', sans-serif" }}
-            placeholder="Ej. Poder Matutino — Semana 12"
-          />
-        </div>
-        <div>
-          <label
-            className="block text-xs font-medium tracking-[0.25em] uppercase text-zinc-700 mb-2"
-            style={{ fontFamily: "'Barlow', sans-serif" }}
-          >
-            Entrenador
-          </label>
-          <input
-            type="text"
-            value={coach}
-            onChange={(e) => onUpdateSession("coach", e.target.value)}
-            className="w-full bg-transparent text-sm font-medium text-zinc-300 border-b border-zinc-800 focus:border-zinc-500 outline-none pb-2 transition-colors duration-200"
-            style={{ fontFamily: "'Barlow', sans-serif" }}
-            placeholder="Nombre del entrenador"
-          />
-        </div>
+      <div>
+        <label
+          className="block text-xs font-medium tracking-[0.25em] uppercase text-zinc-700 mb-2"
+          style={{ fontFamily: "'Barlow', sans-serif" }}
+        >
+          Última actualización
+        </label>
+        <input
+          type="text"
+          value={lastUpdated}
+          onChange={(e) => onUpdateSession("lastUpdated", e.target.value)}
+          className="w-full max-w-xs bg-transparent text-sm font-medium text-zinc-300 border-b border-zinc-800 focus:border-zinc-500 outline-none pb-2 transition-colors duration-200"
+          style={{ fontFamily: "'Barlow', sans-serif" }}
+          placeholder="Ej. 07:45"
+        />
+        <p
+          className="mt-2 text-[11px] font-light text-zinc-600 tracking-wide"
+          style={{ fontFamily: "'Barlow', sans-serif" }}
+        >
+          Mismo campo que enviará el backend (hora o timestamp legible en pantalla).
+        </p>
       </div>
     </div>
   );

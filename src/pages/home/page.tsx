@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
-import { workoutData } from "../../mocks/workout";
+import {
+  workoutData,
+  workoutSessionBlocksForDisplay,
+} from "../../mocks/workout";
 import HybridHeader from "./components/HybridHeader";
 import WorkoutBlockCard from "./components/WorkoutBlockCard";
 
 export default function Home() {
-  const { sessionTitle, blocks } = workoutData;
+  const { sessionTitle, lastUpdated, blocks } = workoutData;
+  const displayBlocks = workoutSessionBlocksForDisplay(workoutData);
   const exerciseCount = blocks.reduce((n, b) => n + b.exercises.length, 0);
 
   return (
@@ -46,8 +50,12 @@ export default function Home() {
           aria-label="LOCAL"
           className="flex-1 grid grid-cols-3 gap-[1vw] min-h-0"
         >
-          {blocks.map((block, index) => (
-            <WorkoutBlockCard key={block.id} block={block} index={index} />
+          {displayBlocks.map((block, index) => (
+            <WorkoutBlockCard
+              key={`${block.title}-${index}`}
+              block={block}
+              index={index}
+            />
           ))}
         </section>
       </main>
@@ -77,6 +85,7 @@ export default function Home() {
         <div className="flex items-center gap-[1vw]">
           <span className="text-[0.7vw] font-light tracking-wider text-zinc-700">
             {blocks.length} bloques &nbsp;·&nbsp; {exerciseCount} ítems
+            &nbsp;·&nbsp; actualizado {lastUpdated}
           </span>
           <Link
             to="/edit"

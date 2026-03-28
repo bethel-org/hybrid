@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import bethelLogo from "../../../assets/bethellogo.png";
 import bethelGymLogo from "../../../assets/bethelgymlogo.png";
 
 interface HybridHeaderProps {

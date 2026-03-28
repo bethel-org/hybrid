@@ -1,3 +1,4 @@
+import { BLOCK_DISPLAY_THEMES } from "../../mocks/workout";
 import { useWorkoutEditor } from "./hooks/useWorkoutEditor";
 import EditHeader from "./components/EditHeader";
 import SessionInfoCard from "./components/SessionInfoCard";
@@ -76,8 +77,7 @@ export default function EditPage() {
         {/* Session info card */}
         <SessionInfoCard
           sessionTitle={session.sessionTitle}
-          className={session.className}
-          coach={session.coach}
+          lastUpdated={session.lastUpdated}
           onUpdateSession={updateSession}
         />
 
@@ -94,21 +94,27 @@ export default function EditPage() {
         </div>
 
         {/* Block edit cards */}
-        {session.blocks.map((block) => (
-          <EditBlockCard
-            key={block.id}
-            block={block}
-            onUpdateBlock={(field, value) => updateBlock(block.id, field, value)}
-            onUpdateExercise={(exerciseId, field, value) =>
-              updateExercise(block.id, exerciseId, field, value)
-            }
-            onAddExercise={() => addExercise(block.id)}
-            onRemoveExercise={(exerciseId) => removeExercise(block.id, exerciseId)}
-            onMoveExercise={(exerciseId, direction) =>
-              moveExercise(block.id, exerciseId, direction)
-            }
-          />
-        ))}
+        {session.blocks.map((block, blockIndex) => {
+          const theme =
+            BLOCK_DISPLAY_THEMES[blockIndex % BLOCK_DISPLAY_THEMES.length];
+          return (
+            <EditBlockCard
+              key={block.id}
+              block={block}
+              accent={theme.accent}
+              glow={theme.glow}
+              onUpdateBlock={(field, value) => updateBlock(block.id, field, value)}
+              onUpdateExercise={(exerciseId, field, value) =>
+                updateExercise(block.id, exerciseId, field, value)
+              }
+              onAddExercise={() => addExercise(block.id)}
+              onRemoveExercise={(exerciseId) => removeExercise(block.id, exerciseId)}
+              onMoveExercise={(exerciseId, direction) =>
+                moveExercise(block.id, exerciseId, direction)
+              }
+            />
+          );
+        })}
 
         {/* Bottom action row */}
         <div className="flex items-center justify-between mt-6">

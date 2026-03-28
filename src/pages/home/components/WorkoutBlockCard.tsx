@@ -1,7 +1,7 @@
-import type { WorkoutBlock } from "../../../mocks/workout";
+import type { WorkoutBlockForDisplay } from "../../../mocks/workout";
 
 interface WorkoutBlockCardProps {
-  block: WorkoutBlock;
+  block: WorkoutBlockForDisplay;
   index: number;
 }
 
@@ -124,20 +124,6 @@ export default function WorkoutBlockCard({
         ))}
       </div>
 
-      {/* Footer note */}
-      {/* {block.footerNote && (
-        <div
-          className="mt-[1vh] pt-[0.8vh] shrink-0"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
-        >
-          <p
-            className="text-[0.85vw] font-light tracking-wide italic"
-            style={{ color: "rgba(160,160,160,0.7)", fontFamily: "'Barlow', sans-serif" }}
-          >
-            {block.footerNote}
-          </p>
-        </div>
-      )} */}
     </div>
   );
 }

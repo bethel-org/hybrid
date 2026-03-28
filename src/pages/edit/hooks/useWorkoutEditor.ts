@@ -12,15 +12,11 @@ export interface EditableBlock {
   title: string;
   subtitle: string;
   exercises: EditableExercise[];
-  footerNote: string;
-  accent: string;
-  glow: string;
 }
 
 export interface EditableSession {
   sessionTitle: string;
-  className: string;
-  coach: string;
+  lastUpdated: string;
   blocks: EditableBlock[];
 }
 
@@ -30,10 +26,9 @@ const genId = (): string =>
 function buildInitialSession(): EditableSession {
   return {
     sessionTitle: workoutData.sessionTitle,
-    className: workoutData.className,
-    coach: workoutData.coach,
+    lastUpdated: workoutData.lastUpdated,
     blocks: workoutData.blocks.map((block) => ({
-      id: block.id,
+      id: genId(),
       title: block.title,
       subtitle: block.subtitle ?? "",
       exercises: block.exercises.map((ex) => ({
@@ -41,9 +36,6 @@ function buildInitialSession(): EditableSession {
         name: ex.name,
         detail: ex.detail ?? "",
       })),
-      footerNote: block.footerNote ?? "",
-      accent: block.accent,
-      glow: block.glow,
     })),
   };
 }
@@ -56,28 +48,33 @@ export function useWorkoutEditor() {
   const markDirty = () => setIsDirty(true);
 
   const updateSession = useCallback(
-    (field: "sessionTitle" | "className" | "coach", value: string) => {
+    (field: "sessionTitle" | "lastUpdated", value: string) => {
       setSession((prev) => ({ ...prev, [field]: value }));
       markDirty();
     },
-    []
+    [],
   );
 
   const updateBlock = useCallback(
-    (blockId: string, field: "title" | "subtitle" | "footerNote", value: string) => {
+    (blockId: string, field: "title" | "subtitle", value: string) => {
       setSession((prev) => ({
         ...prev,
         blocks: prev.blocks.map((b) =>
-          b.id === blockId ? { ...b, [field]: value } : b
+          b.id === blockId ? { ...b, [field]: value } : b,
         ),
       }));
       markDirty();
     },
-    []
+    [],
   );
 
   const updateExercise = useCallback(
-    (blockId: string, exerciseId: string, field: "name" | "detail", value: string) => {
+    (
+      blockId: string,
+      exerciseId: string,
+      field: "name" | "detail",
+      value: string,
+    ) => {
       setSession((prev) => ({
         ...prev,
         blocks: prev.blocks.map((b) =>
@@ -85,15 +82,15 @@ export function useWorkoutEditor() {
             ? {
                 ...b,
                 exercises: b.exercises.map((e) =>
-                  e.id === exerciseId ? { ...e, [field]: value } : e
+                  e.id === exerciseId ? { ...e, [field]: value } : e,
                 ),
               }
-            : b
+            : b,
         ),
       }));
       markDirty();
     },
-    []
+    [],
   );
 
   const addExercise = useCallback((blockId: string) => {
@@ -101,8 +98,11 @@ export function useWorkoutEditor() {
       ...prev,
       blocks: prev.blocks.map((b) =>
         b.id === blockId
-          ? { ...b, exercises: [...b.exercises, { id: genId(), name: "", detail: "" }] }
-          : b
+          ? {
+              ...b,
+              exercises: [...b.exercises, { id: genId(), name: "", detail: "" }],
+            }
+          : b,
       ),
     }));
     markDirty();
@@ -114,7 +114,7 @@ export function useWorkoutEditor() {
       blocks: prev.blocks.map((b) =>
         b.id === blockId
           ? { ...b, exercises: b.exercises.filter((e) => e.id !== exerciseId) }
-          : b
+          : b,
       ),
     }));
     markDirty();
@@ -137,7 +137,7 @@ export function useWorkoutEditor() {
       }));
       markDirty();
     },
-    []
+    [],
   );
 
   const save = useCallback(() => {
