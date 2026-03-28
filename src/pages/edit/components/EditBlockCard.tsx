@@ -7,7 +7,11 @@ interface EditBlockCardProps {
   accent: string;
   glow: string;
   onUpdateBlock: (field: "title" | "subtitle", value: string) => void;
-  onUpdateExercise: (exerciseId: string, field: "name" | "detail", value: string) => void;
+  onUpdateExercise: (
+    exerciseId: string,
+    field: "name" | "detail",
+    value: string,
+  ) => void;
   onAddExercise: () => void;
   onRemoveExercise: (exerciseId: string) => void;
   onMoveExercise: (exerciseId: string, direction: "up" | "down") => void;
@@ -74,7 +78,10 @@ export default function EditBlockCard({
         </div>
 
         <div className="flex items-center gap-3 mb-1">
-          <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.05)" }} />
+          <div
+            className="h-px flex-1"
+            style={{ background: "rgba(255,255,255,0.05)" }}
+          />
           <span
             className="text-[10px] font-semibold tracking-[0.3em] uppercase text-zinc-700"
             style={{ fontFamily: "'Barlow', sans-serif" }}
@@ -91,7 +98,10 @@ export default function EditBlockCard({
           >
             {block.exercises.length}
           </span>
-          <div className="h-px flex-1" style={{ background: "rgba(255,255,255,0.05)" }} />
+          <div
+            className="h-px flex-1"
+            style={{ background: "rgba(255,255,255,0.05)" }}
+          />
         </div>
 
         <div className="mb-5 min-h-[40px]">
@@ -113,10 +123,12 @@ export default function EditBlockCard({
               accent={accent}
               isFirst={idx === 0}
               isLast={idx === block.exercises.length - 1}
-              onUpdate={(field, value) => onUpdateExercise(exercise.id, field, value)}
+              onUpdate={(field, value) =>
+                onUpdateExercise(exercise.id, field, value)
+              }
               onRemove={() => onRemoveExercise(exercise.id)}
-              onMoveUp={() => onMoveExercise(exercise.id, "up")}
-              onMoveDown={() => onMoveExercise(exercise.id, "down")}
+              // onMoveUp={() => onMoveExercise(exercise.id, "up")}
+              // onMoveDown={() => onMoveExercise(exercise.id, "down")}
             />
           ))}
         </div>

@@ -9,8 +9,8 @@ interface ExerciseRowProps {
   isLast: boolean;
   onUpdate: (field: "name" | "detail", value: string) => void;
   onRemove: () => void;
-  onMoveUp: () => void;
-  onMoveDown: () => void;
+  // onMoveUp: () => void;
+  // onMoveDown: () => void;
 }
 
 export default function ExerciseRow({
@@ -21,8 +21,8 @@ export default function ExerciseRow({
   isLast,
   onUpdate,
   onRemove,
-  onMoveUp,
-  onMoveDown,
+  // onMoveUp,
+  // onMoveDown,
 }: ExerciseRowProps) {
   const [deleteHover, setDeleteHover] = useState(false);
 
@@ -68,7 +68,7 @@ export default function ExerciseRow({
 
       {/* Actions — visible on group hover or focus-within */}
       <div className="flex items-center gap-0.5 flex-shrink-0 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-150">
-        <button
+        {/* <button
           onClick={onMoveUp}
           disabled={isFirst}
           title="Mover arriba"
@@ -85,7 +85,7 @@ export default function ExerciseRow({
           style={{ color: "rgba(255,255,255,0.35)" }}
         >
           <i className="ri-arrow-down-s-line text-sm" />
-        </button>
+        </button> */}
         <button
           onClick={onRemove}
           onMouseEnter={() => setDeleteHover(true)}
