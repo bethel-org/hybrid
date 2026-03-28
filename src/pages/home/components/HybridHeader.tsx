@@ -43,15 +43,12 @@ export default function HybridHeader({
       {/* Date top-left / Time top-right */}
       <div className="absolute top-[1.5vh] left-[2vw] flex items-center gap-[0.3vw]">
         <span className="w-[0.5vw] h-[0.5vw] rounded-full bg-emerald-400 animate-pulse"></span>
-        <span className="text-[1.1vw] font-light tracking-widest text-zinc-500 uppercase">
+        <span className="text-[1.3vw] font-light tracking-widest text-white uppercase">
           {date}
         </span>
       </div>
       <div className="absolute top-[1.5vh] right-[2vw] flex items-center gap-[0.3vw]">
-        <span className="text-[1.1vw] font-light tracking-widest text-zinc-500">
-          Actualizado
-        </span>
-        <span className="text-[1.1vw] font-semibold tracking-widest text-zinc-300">
+        <span className="text-[1.8vw] font-semibold tracking-widest text-zinc-300">
           {currentTime}
         </span>
       </div>

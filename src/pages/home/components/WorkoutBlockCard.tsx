@@ -13,7 +13,7 @@ export default function WorkoutBlockCard({
 
   return (
     <div
-      className="flex flex-col flex-1 rounded-[1vw] p-[1.5vw] relative overflow-hidden min-h-0"
+      className="flex flex-col flex-1 rounded-[1vw] p-[1.1vw] relative overflow-hidden min-h-0"
       style={{
         background: "linear-gradient(160deg, #141414 0%, #0f0f0f 100%)",
         border: `1px solid rgba(255,255,255,0.05)`,
@@ -36,7 +36,7 @@ export default function WorkoutBlockCard({
         {block.subtitle && (
           <div className="mb-[0.6vh]">
             <span
-              className="inline-block text-[0.75vw] font-bold tracking-[0.3em] uppercase px-[0.6vw] py-[0.3vh] rounded-full"
+              className="inline-block text-[0.9vw] font-bold tracking-[0.3em] uppercase px-[0.6vw] py-[0.3vh] rounded-full"
               style={{
                 color: block.accent,
                 background: `${block.accent}18`,
@@ -51,7 +51,7 @@ export default function WorkoutBlockCard({
 
         {/* Block Title */}
         <h2
-          className="text-[3.2vw] font-black tracking-[0.12em] leading-none mb-[0.6vh]"
+          className="text-[3.5vw] font-black tracking-[0.12em] leading-none mb-[0.6vh]"
           style={{
             color: block.accent,
             fontFamily: "'Barlow Condensed', sans-serif",
@@ -92,16 +92,16 @@ export default function WorkoutBlockCard({
             {/* Index dot + Exercise name */}
             <div className="flex items-center gap-[0.4vw]">
               <span
-                className="text-[0.65vw] font-bold tabular-nums w-[1.2vw] text-right select-none"
+                className="text-[1.2vw] font-bold tabular-nums w-[1.5vw] text-right select-none"
                 style={{
-                  color: `${block.accent}60`,
+                  color: `${block.accent}`,
                   fontFamily: "'Barlow Condensed', sans-serif",
                 }}
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span
-                className="text-[1.15vw] font-semibold tracking-wide leading-tight text-zinc-100"
+                className="text-[1.4vw] font-semibold tracking-wide leading-tight text-zinc-100"
                 style={{ fontFamily: "'Barlow', sans-serif" }}
               >
                 {exercise.name}
@@ -111,7 +111,7 @@ export default function WorkoutBlockCard({
             {/* Detail / reps */}
             {exercise.detail && (
               <span
-                className="text-[1vw] font-bold tracking-widest whitespace-nowrap ml-[0.5vw]"
+                className="text-[1.4vw] font-bold tracking-widest whitespace-nowrap ml-[0.5vw]"
                 style={{
                   color: block.accent,
                   fontFamily: "'Barlow Condensed', sans-serif",
