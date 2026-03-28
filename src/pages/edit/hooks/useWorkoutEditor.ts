@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { workoutData } from "../../../mocks/workout";
+import { useCallback, useLayoutEffect, useState } from "react";
+import type { WorkoutSession } from "../../../mocks/workout";
 
 export interface EditableExercise {
   id: string;
@@ -23,11 +23,11 @@ export interface EditableSession {
 const genId = (): string =>
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 
-function buildInitialSession(): EditableSession {
+export function sessionFromApi(data: WorkoutSession): EditableSession {
   return {
-    sessionTitle: workoutData.sessionTitle,
-    lastUpdated: workoutData.lastUpdated,
-    blocks: workoutData.blocks.map((block) => ({
+    sessionTitle: data.sessionTitle,
+    lastUpdated: data.lastUpdated,
+    blocks: data.blocks.map((block) => ({
       id: genId(),
       title: block.title,
       subtitle: block.subtitle ?? "",
@@ -40,12 +40,47 @@ function buildInitialSession(): EditableSession {
   };
 }
 
-export function useWorkoutEditor() {
-  const [session, setSession] = useState<EditableSession>(buildInitialSession);
+export function editableSessionToWorkoutSession(
+  s: EditableSession,
+): WorkoutSession {
+  return {
+    sessionTitle: s.sessionTitle,
+    lastUpdated: s.lastUpdated,
+    blocks: s.blocks.map((b) => ({
+      title: b.title,
+      subtitle: b.subtitle.trim() === "" ? undefined : b.subtitle,
+      exercises: b.exercises.map((e) => ({
+        name: e.name,
+        detail: e.detail,
+      })),
+    })),
+  };
+}
+
+export function useWorkoutEditor(
+  serverSession: WorkoutSession,
+  options: {
+    onSaveRequest: (payload: WorkoutSession) => Promise<WorkoutSession>;
+  },
+) {
+  const { onSaveRequest } = options;
+
+  const [session, setSession] = useState<EditableSession>(() =>
+    sessionFromApi(serverSession),
+  );
   const [showSaved, setShowSaved] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
-  const markDirty = () => setIsDirty(true);
+  useLayoutEffect(() => {
+    if (isDirty) return;
+    setSession(sessionFromApi(serverSession));
+  }, [serverSession, isDirty]);
+
+  const markDirty = () => {
+    setSaveError(null);
+    setIsDirty(true);
+  };
 
   const updateSession = useCallback(
     (field: "sessionTitle" | "lastUpdated", value: string) => {
@@ -100,7 +135,10 @@ export function useWorkoutEditor() {
         b.id === blockId
           ? {
               ...b,
-              exercises: [...b.exercises, { id: genId(), name: "", detail: "" }],
+              exercises: [
+                ...b.exercises,
+                { id: genId(), name: "", detail: "" },
+              ],
             }
           : b,
       ),
@@ -140,21 +178,33 @@ export function useWorkoutEditor() {
     [],
   );
 
-  const save = useCallback(() => {
-    setShowSaved(true);
-    setIsDirty(false);
-    setTimeout(() => setShowSaved(false), 3500);
-  }, []);
+  const save = useCallback(async () => {
+    setSaveError(null);
+    try {
+      const payload = editableSessionToWorkoutSession(session);
+      const updated = await onSaveRequest(payload);
+      setSession(sessionFromApi(updated));
+      setIsDirty(false);
+      setShowSaved(true);
+      setTimeout(() => setShowSaved(false), 3500);
+    } catch (e) {
+      setSaveError(
+        e instanceof Error ? e.message : "No se pudo guardar. Reintentá.",
+      );
+    }
+  }, [session, onSaveRequest]);
 
   const reset = useCallback(() => {
-    setSession(buildInitialSession());
+    setSession(sessionFromApi(serverSession));
     setIsDirty(false);
-  }, []);
+    setSaveError(null);
+  }, [serverSession]);
 
   return {
     session,
     showSaved,
     isDirty,
+    saveError,
     updateSession,
     updateBlock,
     updateExercise,

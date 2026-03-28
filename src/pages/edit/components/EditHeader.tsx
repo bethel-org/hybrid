@@ -3,9 +3,14 @@ import { Link } from "react-router-dom";
 interface EditHeaderProps {
   onSave: () => void;
   isDirty: boolean;
+  isSaving?: boolean;
 }
 
-export default function EditHeader({ onSave, isDirty }: EditHeaderProps) {
+export default function EditHeader({
+  onSave,
+  isDirty,
+  isSaving = false,
+}: EditHeaderProps) {
   return (
     <header
       className="sticky top-0 z-50 flex items-center justify-between px-5 sm:px-8 py-4"
@@ -66,17 +71,23 @@ export default function EditHeader({ onSave, isDirty }: EditHeaderProps) {
         </Link>
 
         <button
+          type="button"
           onClick={onSave}
-          className="flex items-center gap-2 px-4 sm:px-6 py-2 rounded-full text-sm font-bold tracking-wide cursor-pointer whitespace-nowrap transition-all duration-300"
+          disabled={isSaving || !isDirty}
+          className="flex items-center gap-2 px-4 sm:px-6 py-2 rounded-full text-sm font-bold tracking-wide cursor-pointer whitespace-nowrap transition-all duration-300 disabled:pointer-events-none disabled:opacity-40"
           style={{
-            background: isDirty ? "#ffffff" : "rgba(255,255,255,0.07)",
-            color: isDirty ? "#000000" : "rgba(255,255,255,0.22)",
+            background:
+              isDirty && !isSaving ? "#ffffff" : "rgba(255,255,255,0.07)",
+            color: isDirty && !isSaving ? "#000000" : "rgba(255,255,255,0.22)",
             fontFamily: "'Barlow', sans-serif",
-            boxShadow: isDirty ? "0 0 24px rgba(255,255,255,0.15)" : "none",
+            boxShadow:
+              isDirty && !isSaving ? "0 0 24px rgba(255,255,255,0.15)" : "none",
           }}
         >
-          <i className={`ri-save-3-line text-base ${isDirty ? "text-black" : ""}`} />
-          <span>Guardar</span>
+          <i
+            className={`ri-save-3-line text-base ${isDirty && !isSaving ? "text-black" : ""}`}
+          />
+          <span>{isSaving ? "Guardando…" : "Guardar"}</span>
         </button>
       </div>
     </header>

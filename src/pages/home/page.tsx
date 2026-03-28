@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
 import {
-  workoutData,
   workoutSessionBlocksForDisplay,
+  type WorkoutSession,
 } from "../../mocks/workout";
+import { useHybridWorkoutQuery } from "../../hooks/useHybridWorkout";
 import HybridHeader from "./components/HybridHeader";
 import WorkoutBlockCard from "./components/WorkoutBlockCard";
 
-export default function Home() {
-  const { sessionTitle, lastUpdated, blocks } = workoutData;
-  const displayBlocks = workoutSessionBlocksForDisplay(workoutData);
+function HomeContent({ session }: { session: WorkoutSession }) {
+  const { sessionTitle, lastUpdated, blocks } = session;
+  const displayBlocks = workoutSessionBlocksForDisplay(session);
   const exerciseCount = blocks.reduce((n, b) => n + b.exercises.length, 0);
 
   return (
@@ -20,7 +21,6 @@ export default function Home() {
         fontFamily: "'Barlow', sans-serif",
       }}
     >
-      {/* Subtle top texture line */}
       <div
         className="w-full h-px shrink-0"
         style={{
@@ -29,14 +29,11 @@ export default function Home() {
         }}
       />
 
-      {/* Header */}
       <section className="shrink-0">
         <HybridHeader sessionTitle={sessionTitle} />
       </section>
 
-      {/* 3-Column Workout Blocks */}
       <main className="flex-1 flex flex-col px-[2vw] pb-[1vh] min-h-0">
-        {/* Section label row */}
         <div className="flex items-center gap-[0.5vw] mb-[1vh] px-[0.2vw] shrink-0">
           <div className="h-px flex-1 bg-zinc-800" />
           <span className="text-[0.85vw] font-light tracking-[0.4em] uppercase text-zinc-600">
@@ -45,7 +42,6 @@ export default function Home() {
           <div className="h-px flex-1 bg-zinc-800" />
         </div>
 
-        {/* Blocks grid */}
         <section
           aria-label="LOCAL"
           className="flex-1 grid grid-cols-3 gap-[1vw] min-h-0"
@@ -60,7 +56,6 @@ export default function Home() {
         </section>
       </main>
 
-      {/* Footer strip */}
       <footer className="flex items-center justify-between px-[2vw] py-[0.8vh] shrink-0">
         <div className="flex items-center gap-[0.3vw]">
           <div
@@ -106,4 +101,51 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+export default function Home() {
+  const { data, isPending, isError, error, refetch } = useHybridWorkoutQuery();
+
+  if (isPending && data === undefined) {
+    return (
+      <div
+        className="h-screen w-full flex flex-col items-center justify-center gap-3 text-zinc-500 text-sm tracking-wide"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, #111111 0%, #080808 55%, #000000 100%)",
+          fontFamily: "'Barlow', sans-serif",
+        }}
+      >
+        <span>Cargando sesión…</span>
+      </div>
+    );
+  }
+
+  if (data === undefined) {
+    return (
+      <div
+        className="h-screen w-full flex flex-col items-center justify-center gap-4 px-6 text-center"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, #111111 0%, #080808 55%, #000000 100%)",
+          fontFamily: "'Barlow', sans-serif",
+        }}
+      >
+        <p className="text-zinc-400 text-sm max-w-md">
+          {isError && error instanceof Error
+            ? error.message
+            : "No se pudo cargar la sesión."}
+        </p>
+        <button
+          type="button"
+          onClick={() => void refetch()}
+          className="px-5 py-2 rounded-full text-sm font-semibold text-black bg-white"
+        >
+          Reintentar
+        </button>
+      </div>
+    );
+  }
+
+  return <HomeContent session={data} />;
 }

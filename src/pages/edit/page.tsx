@@ -1,3 +1,8 @@
+import type { WorkoutSession } from "../../mocks/workout";
+import {
+  useHybridWorkoutQuery,
+  useUpdateHybridWorkoutMutation,
+} from "../../hooks/useHybridWorkout";
 import { BLOCK_DISPLAY_THEMES } from "../../mocks/workout";
 import { useWorkoutEditor } from "./hooks/useWorkoutEditor";
 import EditHeader from "./components/EditHeader";
@@ -5,11 +10,20 @@ import SessionInfoCard from "./components/SessionInfoCard";
 import EditBlockCard from "./components/EditBlockCard";
 import SaveToast from "./components/SaveToast";
 
-export default function EditPage() {
+function EditPageShell({
+  serverSession,
+  persistWorkout,
+  isSaving,
+}: {
+  serverSession: WorkoutSession;
+  persistWorkout: (payload: WorkoutSession) => Promise<WorkoutSession>;
+  isSaving: boolean;
+}) {
   const {
     session,
     showSaved,
     isDirty,
+    saveError,
     updateSession,
     updateBlock,
     updateExercise,
@@ -18,23 +32,26 @@ export default function EditPage() {
     moveExercise,
     save,
     reset,
-  } = useWorkoutEditor();
+  } = useWorkoutEditor(serverSession, {
+    onSaveRequest: persistWorkout,
+  });
 
   return (
     <div
       className="min-h-screen w-full"
       style={{
-        background: "radial-gradient(ellipse at 50% 0%, #0d0d0d 0%, #060606 60%, #000 100%)",
+        background:
+          "radial-gradient(ellipse at 50% 0%, #0d0d0d 0%, #060606 60%, #000 100%)",
         fontFamily: "'Barlow', sans-serif",
       }}
     >
-      {/* Sticky top nav */}
-      <EditHeader onSave={save} isDirty={isDirty} />
+      <EditHeader
+        onSave={() => void save()}
+        isDirty={isDirty}
+        isSaving={isSaving}
+      />
 
-      {/* Scrollable edit area */}
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8 pb-32">
-
-        {/* Page heading */}
         <div className="mb-7">
           <div className="flex items-center gap-3 mb-1">
             <h1
@@ -61,11 +78,11 @@ export default function EditPage() {
             className="text-xs font-light text-zinc-600 tracking-wide"
             style={{ fontFamily: "'Barlow', sans-serif" }}
           >
-            Edita el contenido y pulsa Guardar para actualizar la pantalla de visualización.
+            Edita el contenido y pulsa Guardar para actualizar la pantalla de
+            visualización.
           </p>
         </div>
 
-        {/* Thin accent divider */}
         <div
           className="w-full h-px mb-7"
           style={{
@@ -74,14 +91,12 @@ export default function EditPage() {
           }}
         />
 
-        {/* Session info card */}
         <SessionInfoCard
           sessionTitle={session.sessionTitle}
           lastUpdated={session.lastUpdated}
           onUpdateSession={updateSession}
         />
 
-        {/* Section label */}
         <div className="flex items-center gap-3 my-6">
           <div className="h-px flex-1 bg-zinc-800/80" />
           <span
@@ -93,7 +108,6 @@ export default function EditPage() {
           <div className="h-px flex-1 bg-zinc-800/80" />
         </div>
 
-        {/* Block edit cards */}
         {session.blocks.map((block, blockIndex) => {
           const theme =
             BLOCK_DISPLAY_THEMES[blockIndex % BLOCK_DISPLAY_THEMES.length];
@@ -103,12 +117,16 @@ export default function EditPage() {
               block={block}
               accent={theme.accent}
               glow={theme.glow}
-              onUpdateBlock={(field, value) => updateBlock(block.id, field, value)}
+              onUpdateBlock={(field, value) =>
+                updateBlock(block.id, field, value)
+              }
               onUpdateExercise={(exerciseId, field, value) =>
                 updateExercise(block.id, exerciseId, field, value)
               }
               onAddExercise={() => addExercise(block.id)}
-              onRemoveExercise={(exerciseId) => removeExercise(block.id, exerciseId)}
+              onRemoveExercise={(exerciseId) =>
+                removeExercise(block.id, exerciseId)
+              }
               onMoveExercise={(exerciseId, direction) =>
                 moveExercise(block.id, exerciseId, direction)
               }
@@ -116,11 +134,21 @@ export default function EditPage() {
           );
         })}
 
-        {/* Bottom action row */}
+        {saveError && (
+          <p
+            className="mt-4 text-sm text-red-400/90"
+            style={{ fontFamily: "'Barlow', sans-serif" }}
+          >
+            {saveError}
+          </p>
+        )}
+
         <div className="flex items-center justify-between mt-6">
           <button
+            type="button"
             onClick={reset}
-            className="flex items-center gap-2 text-xs font-medium text-zinc-700 cursor-pointer transition-colors whitespace-nowrap hover:text-zinc-400"
+            disabled={isSaving}
+            className="flex items-center gap-2 text-xs font-medium text-zinc-700 cursor-pointer transition-colors whitespace-nowrap hover:text-zinc-400 disabled:opacity-40 disabled:pointer-events-none"
             style={{ fontFamily: "'Barlow', sans-serif" }}
           >
             <i className="ri-refresh-line text-sm" />
@@ -128,23 +156,84 @@ export default function EditPage() {
           </button>
 
           <button
-            onClick={save}
-            className="flex items-center gap-2 px-8 py-3 rounded-full text-sm font-bold tracking-wide cursor-pointer whitespace-nowrap transition-all duration-300"
+            type="button"
+            onClick={() => void save()}
+            disabled={isSaving || !isDirty}
+            className="flex items-center gap-2 px-8 py-3 rounded-full text-sm font-bold tracking-wide cursor-pointer whitespace-nowrap transition-all duration-300 disabled:pointer-events-none"
             style={{
-              background: isDirty ? "#ffffff" : "rgba(255,255,255,0.06)",
-              color: isDirty ? "#000000" : "rgba(255,255,255,0.2)",
-              boxShadow: isDirty ? "0 0 28px rgba(255,255,255,0.12)" : "none",
+              background:
+                isDirty && !isSaving ? "#ffffff" : "rgba(255,255,255,0.06)",
+              color: isDirty && !isSaving ? "#000000" : "rgba(255,255,255,0.2)",
+              boxShadow:
+                isDirty && !isSaving
+                  ? "0 0 28px rgba(255,255,255,0.12)"
+                  : "none",
               fontFamily: "'Barlow', sans-serif",
             }}
           >
-            <i className="ri-save-3-line" />
-            Guardar cambios
+            <i
+              className={`ri-save-3-line ${isSaving ? "animate-pulse" : ""}`}
+            />
+            {isSaving ? "Guardando…" : "Guardar cambios"}
           </button>
         </div>
       </main>
 
-      {/* Success toast */}
       <SaveToast visible={showSaved} />
     </div>
+  );
+}
+
+export default function EditPage() {
+  const { data, isPending, isError, error, refetch } = useHybridWorkoutQuery();
+  const mutation = useUpdateHybridWorkoutMutation();
+
+  if (isPending && data === undefined) {
+    return (
+      <div
+        className="min-h-screen w-full flex items-center justify-center text-zinc-500 text-sm tracking-wide"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, #0d0d0d 0%, #060606 60%, #000 100%)",
+          fontFamily: "'Barlow', sans-serif",
+        }}
+      >
+        Cargando sesión…
+      </div>
+    );
+  }
+
+  if (data === undefined) {
+    return (
+      <div
+        className="min-h-screen w-full flex flex-col items-center justify-center gap-4 px-6 text-center"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, #0d0d0d 0%, #060606 60%, #000 100%)",
+          fontFamily: "'Barlow', sans-serif",
+        }}
+      >
+        <p className="text-zinc-400 text-sm max-w-md">
+          {isError && error instanceof Error
+            ? error.message
+            : "No se pudo cargar la sesión híbrida."}
+        </p>
+        <button
+          type="button"
+          onClick={() => void refetch()}
+          className="px-5 py-2 rounded-full text-sm font-semibold text-black bg-white"
+        >
+          Reintentar
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <EditPageShell
+      serverSession={data}
+      persistWorkout={mutation.mutateAsync}
+      isSaving={mutation.isPending}
+    />
   );
 }
