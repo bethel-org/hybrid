@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import bethelGymLogo from "../../../assets/bethelgymlogo.png";
+import xiaomiLogo from "../../../assets/xiaomilogo.png";
 
 interface HybridHeaderProps {
   sessionTitle: string;
@@ -32,16 +33,7 @@ export default function HybridHeader({ sessionTitle }: HybridHeaderProps) {
   return (
     <header className="flex flex-col items-center pt-[2.5vh] pb-[1.5vh] px-[2vw] relative">
       {/* Date top-left / Time top-right */}
-      <div className="absolute top-[1.5vh] left-[2vw] flex items-center gap-[0.3vw]">
-        <span className="w-[0.5vw] h-[0.5vw] rounded-full bg-emerald-400 animate-pulse"></span>
-        <span className="text-[1.3vw] font-light tracking-widest text-white uppercase">
-          {new Date().toLocaleDateString("es-ES", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-          })}
-        </span>
-      </div>
+
       <div className="absolute top-[1.5vh] right-[2vw] flex items-center gap-[0.3vw]">
         <span className="text-[1.8vw] font-semibold tracking-widest text-zinc-300">
           {currentTime}
@@ -50,12 +42,20 @@ export default function HybridHeader({ sessionTitle }: HybridHeaderProps) {
 
       {/* Main Title with logos */}
       <div className="flex items-center gap-[12vw]">
-        <img
-          src={bethelGymLogo}
-          alt="Bethel Logo"
-          className="h-[3.5vw] w-auto object-contain select-none"
-          draggable={false}
-        />
+        <div className="flex items-center gap-[4.5vw]">
+          <img
+            src={bethelGymLogo}
+            alt="Bethel Gym Logo"
+            className="h-[3.5vw] w-auto object-contain select-none"
+            draggable={false}
+          />
+          <img
+            src={xiaomiLogo}
+            alt="Xiaomi Logo"
+            className="h-[3.5vw] w-auto object-contain select-none"
+            draggable={false}
+          />
+        </div>
         <h1
           className="text-[5.5vw] font-black tracking-[0.25em] text-white leading-none select-none"
           style={{
@@ -65,12 +65,20 @@ export default function HybridHeader({ sessionTitle }: HybridHeaderProps) {
         >
           {sessionTitle}
         </h1>
-        <img
-          src={bethelGymLogo}
-          alt="Bethel Gym Logo"
-          className="h-[3.5vw] w-auto object-contain select-none"
-          draggable={false}
-        />
+        <div className="flex items-center gap-[4.5vw]">
+          <img
+            src={bethelGymLogo}
+            alt="Bethel Gym Logo"
+            className="h-[3.5vw] w-auto object-contain select-none"
+            draggable={false}
+          />
+          <img
+            src={xiaomiLogo}
+            alt="Xiaomi Logo"
+            className="h-[3.5vw] w-auto object-contain select-none"
+            draggable={false}
+          />
+        </div>
       </div>
 
       {/* Divider line */}
