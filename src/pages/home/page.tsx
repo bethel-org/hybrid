@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   workoutSessionBlocksForDisplay,
   type WorkoutSession,
@@ -104,7 +105,14 @@ function HomeContent({ session }: { session: WorkoutSession }) {
 }
 
 export default function Home() {
+  const navigate = useNavigate();
   const { data, isPending, isError, error, refetch } = useHybridWorkoutQuery();
+
+  useEffect(() => {
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      navigate("/edit", { replace: true });
+    }
+  }, [navigate]);
 
   if (isPending && data === undefined) {
     return (
