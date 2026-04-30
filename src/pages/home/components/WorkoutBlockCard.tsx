@@ -92,7 +92,7 @@ export default function WorkoutBlockCard({
             {/* Index dot + Exercise name */}
             <div className="flex items-center gap-[0.4vw]">
               <span
-                className="text-[1.2vw] font-bold tabular-nums w-[1.5vw] text-right select-none"
+                className="text-[1.6vw] font-bold tabular-nums w-[1.6vw] text-right select-none"
                 style={{
                   color: `${block.accent}`,
                   fontFamily: "'Barlow Condensed', sans-serif",
@@ -101,7 +101,7 @@ export default function WorkoutBlockCard({
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span
-                className="text-[1.4vw] font-semibold tracking-wide leading-tight text-zinc-100"
+                className="text-[1.65vw] font-semibold tracking-wide leading-tight text-zinc-100"
                 style={{ fontFamily: "'Barlow', sans-serif" }}
               >
                 {exercise.name}
@@ -111,7 +111,7 @@ export default function WorkoutBlockCard({
             {/* Detail / reps */}
             {exercise.detail && (
               <span
-                className="text-[1.4vw] font-bold tracking-widest whitespace-nowrap ml-[0.5vw]"
+                className="text-[1.6vw] font-bold tracking-widest whitespace-nowrap ml-[0.5vw]"
                 style={{
                   color: block.accent,
                   fontFamily: "'Barlow Condensed', sans-serif",
@@ -123,7 +123,6 @@ export default function WorkoutBlockCard({
           </div>
         ))}
       </div>
-
     </div>
   );
 }

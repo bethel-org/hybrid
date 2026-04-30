@@ -33,7 +33,7 @@ export default function ExerciseRow({
     >
       {/* Index */}
       <span
-        className="text-xs font-bold w-5 text-right flex-shrink-0 select-none tabular-nums"
+        className="text-sm font-bold w-6 text-right flex-shrink-0 select-none tabular-nums"
         style={{
           color: `${accent}55`,
           fontFamily: "'Barlow Condensed', sans-serif",
@@ -47,7 +47,7 @@ export default function ExerciseRow({
         type="text"
         value={exercise.name}
         onChange={(e) => onUpdate("name", e.target.value)}
-        className="flex-1 min-w-0 bg-transparent text-[15px] font-semibold text-zinc-100 outline-none placeholder:text-zinc-700 transition-colors"
+        className="flex-1 min-w-0 bg-transparent text-[16px] font-semibold text-zinc-100 outline-none placeholder:text-zinc-700 transition-colors"
         style={{ fontFamily: "'Barlow', sans-serif" }}
         placeholder="Nombre del ejercicio"
       />
@@ -57,7 +57,7 @@ export default function ExerciseRow({
         type="text"
         value={exercise.detail}
         onChange={(e) => onUpdate("detail", e.target.value)}
-        className="w-24 sm:w-28 flex-shrink-0 bg-transparent text-sm font-bold text-right outline-none placeholder:text-zinc-700 transition-colors"
+        className="w-24 sm:w-28 flex-shrink-0 bg-transparent text-[15px] font-bold text-right outline-none placeholder:text-zinc-700 transition-colors"
         style={{
           color: accent,
           fontFamily: "'Barlow Condensed', sans-serif",
