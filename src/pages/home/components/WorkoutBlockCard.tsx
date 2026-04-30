@@ -33,10 +33,10 @@ export default function WorkoutBlockCard({
       {/* Block header */}
       <div className="mb-[1.2vh] shrink-0">
         {/* Badge / Subtitle */}
-        {block.subtitle && (
+        {/* {block.subtitle && (
           <div className="mb-[0.6vh]">
             <span
-              className="inline-block text-[0.9vw] font-bold tracking-[0.3em] uppercase px-[0.6vw] py-[0.3vh] rounded-full"
+              className="inline-block text-[1vw] font-bold tracking-[0.3em] uppercase px-[0.6vw] py-[0.3vh] rounded-full"
               style={{
                 color: block.accent,
                 background: `${block.accent}18`,
@@ -47,7 +47,7 @@ export default function WorkoutBlockCard({
               {block.subtitle}
             </span>
           </div>
-        )}
+        )} */}
 
         {/* Block Title */}
         <h2

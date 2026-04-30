@@ -57,7 +57,7 @@ export default function HybridHeader({ sessionTitle }: HybridHeaderProps) {
           draggable={false}
         />
         <h1
-          className="text-[6.5vw] font-black tracking-[0.25em] text-white leading-none select-none"
+          className="text-[5.5vw] font-black tracking-[0.25em] text-white leading-none select-none"
           style={{
             fontFamily: "'Barlow Condensed', sans-serif",
             textShadow: "0 0 6vw rgba(255,255,255,0.06)",
